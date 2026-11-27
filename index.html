@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Material Usage Finder</title>
+<style>
+:root{--shell:#354a5f;--acc:#0a6ed1;--bg:#e9edf2;--pan:#fff;--bd:#c4ccd6;--hd:#dde5ee;--tx:#1d2d3e;--mu:#5f6f80;--sel:#d5e7f8;--find:#fff8c6;--ok:#107e3e;--wn:#e9730c;--bd2:#e3e8ee;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--shell:#1b2735;--acc:#5aaafa;--bg:#141a22;--pan:#1f2833;--bd:#3a4757;--hd:#2a3644;--tx:#e6ebf0;--mu:#97a6b6;--sel:#27425e;--find:#4a4520;--ok:#5fce8a;--wn:#f2a35a;--bd2:#2c3846}}
+:root[data-theme=dark]{--shell:#1b2735;--acc:#5aaafa;--bg:#141a22;--pan:#1f2833;--bd:#3a4757;--hd:#2a3644;--tx:#e6ebf0;--mu:#97a6b6;--sel:#27425e;--find:#4a4520;--ok:#5fce8a;--wn:#f2a35a;--bd2:#2c3846}
+*{box-sizing:border-box}html,body{margin:0;height:100%}body{background:var(--bg);color:var(--tx);font:13px/1.4 "72",Arial,Helvetica,sans-serif}
+.shell{background:var(--shell);color:#fff;display:flex;align-items:center;gap:14px;height:40px;padding:0 14px}.shell b{font-size:15px;font-weight:600}.shell span{opacity:.75}.shell .sp{flex:1}
+.shell button{background:none;border:1px solid #fff5;color:#fff;border-radius:3px;padding:3px 9px;cursor:pointer}
+.menu{background:var(--pan);border-bottom:1px solid var(--bd);display:flex;gap:2px;padding:2px 8px;color:var(--mu);overflow-x:auto}.menu i{font-style:normal;padding:3px 9px;white-space:nowrap}
+.wrap{display:grid;grid-template-columns:200px 1fr;height:calc(100% - 40px - 28px)}
+nav{background:var(--pan);border-right:1px solid var(--bd);padding:8px 0;overflow:auto}nav h4{margin:10px 12px 4px;font-size:12px;color:var(--mu);font-weight:600}
+nav a{display:block;padding:6px 12px 6px 22px;color:var(--tx);cursor:pointer;border-left:3px solid transparent}nav a:hover{background:var(--hd)}nav a.on{background:var(--sel);border-left-color:var(--acc);font-weight:600}
+main{padding:12px;overflow:auto}h2{font-size:16px;font-weight:600;margin:0 0 10px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:12px}
+.tile{background:var(--pan);border:1px solid var(--bd);border-top:3px solid var(--acc);padding:8px 12px}.tile b{display:block;font-size:24px;font-weight:300}.tile span{color:var(--mu)}
+.win{background:var(--pan);border:1px solid var(--bd);margin-bottom:12px}.win>h3{margin:0;padding:5px 10px;font-size:13px;font-weight:600;background:linear-gradient(var(--hd),var(--bd2));border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.bd{padding:10px}.fr{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:8px 12px;align-items:end}
+label{display:flex;flex-direction:column;gap:2px;color:var(--mu);font-size:12px}
+input,select,textarea{font:inherit;color:var(--tx);background:var(--pan);border:1px solid var(--bd);border-radius:2px;padding:5px 7px;min-height:28px;width:100%}input:focus,select:focus,textarea:focus,button:focus-visible,a:focus-visible,tr:focus-visible{outline:2px solid var(--acc);outline-offset:0}
+#q{background:var(--find)}
+.btn{font:inherit;background:var(--pan);color:var(--tx);border:1px solid var(--bd);border-radius:3px;padding:5px 14px;cursor:pointer;min-height:28px}.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}.btn.s{padding:2px 8px;min-height:22px;font-size:12px}
+.tw{overflow:auto;max-height:340px}table{border-collapse:collapse;width:100%}th{position:sticky;top:0;background:linear-gradient(var(--hd),var(--bd2));text-align:left;font-weight:600;padding:5px 8px;border:1px solid var(--bd);white-space:nowrap}td{padding:4px 8px;border:1px solid var(--bd2);vertical-align:top}
+#res tr{cursor:pointer}#res tr:hover td{background:var(--bd2)}#res tr.on td{background:var(--sel)}
+.chip{display:inline-block;border:1px solid var(--bd);background:var(--bd2);border-radius:12px;padding:2px 10px;margin:0 6px 6px 0;cursor:pointer;color:var(--tx);font:inherit}.chip.on{background:var(--acc);border-color:var(--acc);color:#fff}.chip b{font-weight:600}
+.tag{font-size:11px;border-radius:3px;padding:0 5px;border:1px solid}.t1{color:var(--wn);border-color:var(--wn)}.t2{color:var(--ok);border-color:var(--ok)}.t3{color:var(--mu);border-color:var(--mu)}
+.mu{color:var(--mu)}.two{display:grid;grid-template-columns:1fr;gap:12px}
+dialog{border:1px solid var(--bd);padding:0;width:min(560px,94vw);background:var(--pan);color:var(--tx)}dialog::backdrop{background:#0007}dialog h3{margin:0;padding:7px 12px;background:var(--shell);color:#fff;font-size:13px}
+#toast{position:fixed;bottom:calc(14px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--shell);color:#fff;padding:7px 16px;border-radius:3px;display:none}
+@media(max-width:760px){.wrap{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:auto}nav{display:flex;overflow-x:auto;padding:0;border-right:0;border-bottom:1px solid var(--bd)}nav h4{display:none}nav a{white-space:nowrap;border-left:0;border-bottom:3px solid transparent;padding:8px 12px}nav a.on{border-bottom-color:var(--acc)}.menu{display:none}}
+.mg{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:8px}.mc{border:1px solid var(--bd2);background:var(--bg);padding:8px}.sub{font-size:11px;color:var(--mu)}
+</style></head><body>
+<div class="shell"><b>NIPHCO</b><span>Material Usage Finder</span><div class="sp"></div><button id="th" title="Switch light or dark theme">Theme</button></div>
+<div class="menu"><i>File</i><i>Edit</i><i>View</i><i>Data</i><i>Go to</i><i>Modules</i><i>Tools</i><i>Help</i></div>
+<div class="wrap"><nav><h4>Cockpit</h4><a data-v="s" class="on">Material Search</a><h4>Master Data</h4><a data-v="p">Products &amp; Models</a><h4>Actions</h4><a id="add">Add Material…</a><a id="rst">Reset to imported data</a></nav>
+<main><div id="vs"><h2>Material Search</h2><div class="tiles" id="kp"></div>
+<div class="win"><h3>Find Material</h3><div class="bd"><div class="fr">
+<label>Part / material / code<input id="q" type="search" placeholder="e.g. solder, HV998, gloves" autocomplete="off"></label>
+<label>Product<select id="fp"></select></label><label>Model<select id="fm"></select></label><label>Process<select id="fx"></select></label><label>Category<select id="fc"></select></label>
+<button class="btn" id="clr">Clear</button></div></div></div>
+<div class="win"><h3><span id="rc">Results</span><span class="mu">Select a row to see common usages</span></h3><div class="tw"><table id="res"></table></div></div>
+<div class="win" id="dt"></div></div>
+<div id="vp" hidden><h2>Products &amp; Models</h2><div id="pl"></div></div></main></div>
+<dialog id="dg"><h3 id="dgt">Add Material</h3><div class="bd"><div class="fr" style="align-items:start">
+<label>Material name *<input id="fn" list="ln"></label><label>Part No./Code<input id="fk"></label>
+<label>Category<select id="fcat"><option>Direct</option><option>Indirect</option><option>Factory Supply</option></select></label>
+<label>Product * (pick or type new)<input id="fpr" list="lp"></label><label>Model * (pick or type new)<input id="fmo" list="lm"></label>
+<label>Process * (pick or type new)<input id="fpx" list="lx"></label>
+<label>Quantity<input id="fq"></label><label>Unit of measure<input id="fu" placeholder="pc, grams / pc."></label><label>Supplier<input id="fs"></label></div>
+<label style="margin-top:8px">Remarks<textarea id="fr" rows="2"></textarea></label>
+<datalist id="ln"></datalist><datalist id="lp"></datalist><datalist id="lm"></datalist><datalist id="lx"></datalist>
+<p style="text-align:right;margin:10px 0 0"><button class="btn p" id="ok">Save</button> <button class="btn" id="no">Cancel</button></p></div></dialog>
+<div id="toast" role="status"></div>
+<script src="data.js"></script>
+<script>
+const SEED=window.SEED||{products:{},recs:[]},K='muf2',$=s=>document.querySelector(s),
+E=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let O={add:[],ed:{},dl:[],m:[]};try{Object.assign(O,JSON.parse(localStorage.getItem(K)))}catch(e){}
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(O))}catch(e){}};
+const F=['p','m','c','n','k','q','u','s','r','x','g','o','d'],rid=a=>[a[0],a[1],a[3],a[4],a[12]].join('|'),
+uniq=a=>[...new Set(a)].sort((x,y)=>x.localeCompare(y)),sk=r=>r.p+'|'+r.m,
+key=n=>{const k=n.toLowerCase().replace(/\(.*?\)|\d+$|nitrile |hand |dispenser |anti-static |finger ?cots?/g,m=>/finger/.test(m)?'fingercots':'').replace(/[^a-z]/g,'')||n.toLowerCase();return({hardener:'adhesive',mainresin:'adhesive',moleepoxy:'moldepoxy'})[k]||k};
+let ALL=[],PM={},sel=null,cx='',ed=null,pv=null;
+function build(){ALL=[];
+SEED.recs.forEach(a=>{const k=rid(a);if(!O.dl.includes(k))ALL.push({a:O.ed[k]||a,src:'s',id:k})});
+O.add.forEach((a,i)=>ALL.push({a,src:'a',id:i}));
+ALL.forEach((r,ix)=>{r.ix=ix;F.forEach((f,j)=>r[f]=r.a[j])});
+PM={};Object.entries(SEED.products).forEach(([p,v])=>PM[p]={name:v.name,models:{...v.models}});
+const add=(p,m)=>{PM[p]??={name:'',models:{}};PM[p].models[m]??=[]};O.m.forEach(x=>add(x[0],x[1]));ALL.forEach(r=>add(r.p,r.m))}
+const pl=p=>p+(PM[p]&&PM[p].name?' – '+PM[p].name:'');
+function toast(t){const e=$('#toast');e.textContent=t;e.style.display='block';clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display='none',2200)}
+function opts(el,all,list){const v=el.value;el.innerHTML=`<option value="">${all}</option>`+list.map(x=>`<option value="${E(x[0])}">${E(x[1])}</option>`).join('');el.value=v}
+function lists(){opts($('#fp'),'All products',Object.keys(PM).map(p=>[p,pl(p)]));const fp=$('#fp').value;
+opts($('#fm'),'All models',Object.entries(PM).filter(([p])=>!fp||p==fp).flatMap(([p,v])=>Object.keys(v.models).map(m=>[p+'|'+m,fp?m:p+' · '+m])));
+opts($('#fx'),'All processes',uniq(ALL.map(r=>r.x)).map(x=>[x,x]));opts($('#fc'),'All categories',['Direct','Indirect','Factory Supply'].map(x=>[x,x]));
+$('#ln').innerHTML=uniq(ALL.map(r=>r.n)).map(x=>`<option value="${E(x)}">`).join('');
+$('#lp').innerHTML=Object.keys(PM).map(x=>`<option value="${E(x)}">`).join('');
+$('#lx').innerHTML=uniq(ALL.map(r=>r.x)).map(x=>`<option value="${E(x)}">`).join('')}
+const urow=(r,first)=>`<tr><td>${first}</td><td>${E(r.x)} ${r.g?'<span class="tag t1" title="Process was assigned from the material name. Edit to confirm.">Suggested</span>':''}</td><td>${E(r.k)||'–'} ${r.o?'<span class="tag t3">Superseded</span>':''}</td><td>${E([r.q,r.u].filter(Boolean).join(' '))||'–'}</td><td>${E(r.s)}</td><td>${E(r.r)}</td><td style="white-space:nowrap"><button class="btn s" data-e="${r.ix}">Edit</button> <button class="btn s" data-d="${r.ix}">Delete</button></td></tr>`;
+const panel=p=>{if(!pv||pv.split('|')[0]!=p)return'';const m=pv.slice(pv.indexOf('|')+1),rs=ALL.filter(r=>r.p==p&&r.m==m).sort((x,y)=>x.x.localeCompare(y.x)||x.n.localeCompare(y.n));
+return`<div class="bd" style="border-top:1px solid var(--bd2)"><b>Materials – ${E(p)} · ${E(m)}</b> <span class="mu">${rs.length} record${rs.length==1?'':'s'}</span></div><div class="tw"><table><tr><th>Material</th><th>Process</th><th>Part No./Code</th><th>Qty / UoM</th><th>Supplier</th><th>Remarks</th><th></th></tr>`+(rs.map(r=>urow(r,E(r.n))).join('')||'<tr><td colspan="7" class="mu">No materials yet. Use Add material.</td></tr>')+'</table></div>'};
+function hit(r){const t=$('#q').value.toLowerCase().split(/\s+/).filter(Boolean),h=[r.n,r.k,r.r,r.x,r.p,r.m,r.s,r.d,PM[r.p]&&PM[r.p].name].join(' ').toLowerCase(),v=i=>$('#'+i).value;
+return t.every(w=>h.includes(w))&&(!v('fp')||r.p==v('fp'))&&(!v('fm')||sk(r)==v('fm'))&&(!v('fx')||r.x==v('fx'))&&(!v('fc')||r.c==v('fc'))}
+function render(){build();lists();if(!$('#vp').hidden)prods();const g={};ALL.filter(hit).forEach(r=>(g[key(r.n)]??=[]).push(r));
+const ks=Object.keys(g).sort((x,y)=>g[x][0].n.localeCompare(g[y][0].n));if(!g[sel])sel=ks[0]||null;
+const live=ALL.filter(r=>!r.o),nm=Object.values(PM).reduce((a,v)=>a+Object.keys(v.models).length,0);
+$('#kp').innerHTML=[[Object.keys(PM).length,'Products'],[nm,`Models (${new Set(ALL.map(sk)).size} with data)`],[new Set(live.map(r=>key(r.n))).size,'Materials'],[new Set(ALL.map(r=>r.x)).size,'Processes'],[ALL.length,'Usage records'],[ALL.filter(r=>r.g).length,'Process links to verify']].map(x=>`<div class="tile"><b>${x[0]}</b><span>${x[1]}</span></div>`).join('');
+$('#rc').textContent=`Results: ${ks.length} material${ks.length==1?'':'s'}`;
+$('#res').innerHTML='<tr><th>Material</th><th>Category</th><th>Part No./Code</th><th>Models</th><th>Processes</th></tr>'+(ks.map(k=>{const r=g[k];return`<tr tabindex="0" data-k="${E(k)}" class="${k==sel?'on':''}"><td>${E(r[0].n)}</td><td>${uniq(r.map(x=>x.c)).join(', ')}</td><td>${E(uniq(r.map(x=>x.k).filter(Boolean)).slice(0,3).join('; '))}</td><td>${new Set(r.map(sk)).size}</td><td>${E(uniq(r.map(x=>x.x)).join(', '))}</td></tr>`}).join('')||'<tr><td colspan="5" class="mu">No match. Try a shorter term, clear the filters, or use Add Material.</td></tr>');
+const d=$('#dt');if(!sel){d.innerHTML='';return}
+const rs=g[sel],ms=uniq(rs.map(sk)),px={},bp={};rs.forEach(r=>(px[r.x]??=new Set()).add(sk(r)));ms.forEach(s=>{const i=s.indexOf('|');(bp[s.slice(0,i)]??=[]).push(s.slice(i+1))});const np=Object.keys(px).length;
+d.innerHTML=`<h3>Common usages – ${E(rs[0].n)}</h3><div class="bd"><p style="margin:0 0 4px">Listed in <b>${ms.length}</b> model${ms.length>1?'s':''} across <b>${np}</b> process${np>1?'es':''}.</p><p class="mu" style="margin:0 0 8px">${Object.entries(bp).map(([p,a])=>E(p)+': '+E(a.join(', '))).join(' · ')}</p>`+
+Object.entries(px).sort((x,y)=>y[1].size-x[1].size).map(([x,s])=>`<button class="chip ${cx==x?'on':''}" data-x="${E(x)}">${E(x)} <b>${s.size}</b> model${s.size>1?'s':''}</button>`).join('')+
+`</div><div class="tw"><table><tr><th>Product · Model</th><th>Process</th><th>Part No./Code</th><th>Qty / UoM</th><th>Supplier</th><th>Remarks</th><th></th></tr>`+
+rs.filter(r=>!cx||r.x==cx).sort((x,y)=>sk(x).localeCompare(sk(y))).map(r=>urow(r,`<span title="${E(r.d)}">${E(r.p)} · ${E(r.m)}</span>`)).join('')+'</table></div>'}
+function prods(){$('#pl').innerHTML=Object.entries(PM).map(([p,v])=>`<div class="win"><h3>${E(pl(p))}<button class="btn s" data-nm="${E(p)}">+ Model</button></h3><div class="bd mg">`+Object.entries(v.models).map(([m,docs])=>{const n=ALL.filter(r=>r.p==p&&r.m==m).length;return`<div class="mc"><b>${E(m)}</b> <span class="mu">${n} usage record${n==1?'':'s'}</span>`+(docs.map(c=>`<div class="sub" style="margin-top:6px">${E(c.pl)} · ${E(c.rev)}${c.date?' · '+E(c.date):''}<br>${E(c.desc||'')}${c.cust?' · '+E(c.cust):''}${c.pn?' · NIPHCO P/N '+E(c.pn):''}${c.cpn?' · Customer P/N '+E(c.cpn):''}<br><i>${E(c.chg||'')}</i></div>`).join('')||'<div class="sub" style="margin-top:6px">No parts list imported yet.</div>')+`<p style="margin:8px 0 0"><button class="btn s" data-pv="${E(p+'|'+m)}">${pv==p+'|'+m?'Hide materials':'View materials'}</button> <button class="btn s" data-am="${E(p+'|'+m)}">Add material</button></p></div>`}).join('')+'</div>'+panel(p)+'</div>').join('')}
+function view(v){$('#vs').hidden=v!='s';$('#vp').hidden=v!='p';document.querySelectorAll('nav a[data-v]').forEach(a=>a.classList.toggle('on',a.dataset.v==v));if(v=='p')prods()}
+const mods=()=>{$('#lm').innerHTML=Object.keys((PM[$('#fpr').value.trim()]||{models:{}}).models).map(m=>`<option value="${E(m)}">`).join('')};
+function form(ix,pre){ed=ix;const r=ix==null?{}:ALL[ix];$('#dgt').textContent=ix==null?'Add Material':'Edit Material Usage';
+[['fn','n'],['fk','k'],['fpr','p'],['fmo','m'],['fpx','x'],['fq','q'],['fu','u'],['fs','s'],['fr','r']].forEach(([f,k])=>$('#'+f).value=r[k]||'');$('#fcat').value=r.c||'Direct';
+if(ix==null){const p=pre?pre[0]:$('#fp').value,m=pre?pre[1]:($('#fm').value.split('|')[1]||'');$('#fpr').value=p;$('#fmo').value=m;$('#fpx').value=$('#fx').value}
+mods();$('#dg').showModal();$('#fn').focus()}
+$('#fpr').addEventListener('input',mods);
+$('#ok').onclick=()=>{const v=f=>$('#'+f).value.trim(),n=v('fn'),p=v('fpr'),m=v('fmo'),x=v('fpx');
+if(!n||!p||!m||!x){toast('Material name, product, model and process are required.');return}
+const t=ed==null?null:ALL[ed],a=[p,m,v('fcat'),n,v('fk'),v('fq'),v('fu'),v('fs'),v('fr'),x,0,t?t.o:0,t?t.d:'Added manually'];
+if(!t)O.add.push(a);else if(t.src=='a')O.add[t.id]=a;else O.ed[t.id]=a;
+save();$('#dg').close();cx='';sel=key(n);render();toast(t?'Changes saved.':`Material added to ${p} · ${m}.`)};
+$('#no').onclick=()=>$('#dg').close();
+document.addEventListener('click',e=>{const t=e.target.closest('[data-k],[data-x],[data-e],[data-d],[data-v],[data-pv],[data-am],[data-nm]');if(!t)return;const d=t.dataset;
+if(d.k){sel=d.k;cx='';render()}else if(d.x!=null){cx=cx==d.x?'':d.x;render()}else if(d.e)form(+d.e);
+else if(d.d){const r=ALL[+d.d];if(r&&confirm('Delete this usage record?')){if(r.src=='a')O.add.splice(r.id,1);else{O.dl.push(r.id);delete O.ed[r.id]}save();render();toast('Record deleted.')}}
+else if(d.v)view(d.v);
+else if(d.pv){pv=pv==d.pv?null:d.pv;prods()}
+else if(d.am){const i=d.am.indexOf('|');form(null,[d.am.slice(0,i),d.am.slice(i+1)])}
+else if(d.nm){const n=(prompt('New model name for '+d.nm)||'').trim();if(n){O.m.push([d.nm,n]);save();render();toast('Model added.')}}});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.dataset&&e.target.dataset.k){sel=e.target.dataset.k;cx='';render()}});
+['q','fp','fm','fx','fc'].forEach(i=>$('#'+i).addEventListener('input',()=>{cx='';render()}));
+$('#clr').onclick=()=>{['q','fp','fm','fx','fc'].forEach(i=>$('#'+i).value='');cx='';render()};
+$('#add').onclick=()=>form(null);
+$('#rst').onclick=()=>{if(confirm('Remove your additions and edits and restore the imported parts lists?')){O={add:[],ed:{},dl:[],m:[]};save();sel=null;render();toast('Imported data restored.')}};
+$('#th').onclick=()=>{const r=document.documentElement,d=r.dataset.theme=='dark'||(!r.dataset.theme&&matchMedia('(prefers-color-scheme:dark)').matches);r.dataset.theme=d?'light':'dark'};
+render();
+</script></body></html>

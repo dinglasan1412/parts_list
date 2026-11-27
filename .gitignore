@@ -1,0 +1,3 @@
+parts_lists/
+__pycache__/
+*.pyc
